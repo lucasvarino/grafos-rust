@@ -90,7 +90,7 @@ impl Graph {
         }
         num_edges/2
     }
-
+    // TODO: Verificar o grau de cada nó
     pub fn is_complete(&mut self) -> bool{
         let num_edges = self.get_num_edges();
         num_edges == (self.order*(self.order-1)/2) as usize
