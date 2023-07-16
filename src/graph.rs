@@ -51,7 +51,6 @@ impl Edge {
 pub struct Graph {
     adj_list: HashMap<usize, HashSet<Edge>>,
     pub order: i32,
-    adj_list: HashMap<usize, HashSet<usize>>,
 }
 
 
@@ -126,11 +125,11 @@ impl Graph {
         }
     }
 
-    pub fn get_open_neighborhood(&mut self, node: i32) -> &HashSet<usize> {
+    pub fn get_open_neighborhood(&mut self, node: i32) -> &HashSet<Edge> {
         self.adj_list.entry(node as usize).or_default()
     }
 
-    pub fn get_closed_neighborhood(&mut self, node: i32) -> HashSet<usize> {
+    pub fn get_closed_neighborhood(&mut self, node: i32) -> HashSet<Edge> {
         self.adj_list
             .iter()
             .filter(|(_index, edge)| edge.contains(&(node as usize)))
