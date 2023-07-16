@@ -29,12 +29,12 @@ impl Graph {
         self.adj_list
             .entry(src)
             .or_insert_with(HashSet::new)
-            .insert(Edge { dest, weight });
+            .insert(Edge::new(dest, weight));
 
         self.adj_list
             .entry(dest)
             .or_insert_with(HashSet::new)
-            .insert(Edge { dest: src, weight });
+            .insert(Edge::new(src, weight));
     }
 
     pub fn get_edge_weight(&mut self, src: i32, dest: i32) -> io::Result<i32> {
@@ -109,7 +109,7 @@ impl Graph {
             print!("head");
 
             for e in edges {
-                print!(" -> {}", e.dest);
+                print!(" -> {}", e.get_dest());
             }
 
             println!();
