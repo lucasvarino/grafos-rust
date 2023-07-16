@@ -8,7 +8,7 @@ fn main() {
 
     graph_result.print_graph();
 
-    graph_result.remove_node(1);
+    graph_result.remove_edge(1, 2).unwrap();
 
     println!("Remoção do no 1");
     graph_result.print_graph();

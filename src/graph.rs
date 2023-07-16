@@ -29,6 +29,32 @@ impl Graph {
             .insert(src);
     }
 
+    pub fn remove_edge(&mut self, src: i32, dest: i32) -> io::Result<()> {
+        let src_usize = src as usize;
+        let dest_usize = dest as usize;
+
+        let remove_src = self
+            .adj_list
+            .entry(src_usize)
+            .or_default()
+            .remove(&dest_usize);
+
+        let remove_dest = self
+            .adj_list
+            .entry(dest_usize)
+            .or_default()
+            .remove(&src_usize);
+
+        if remove_src && remove_dest {
+            Ok(())
+        } else {
+            Err(io::Error::new(
+                io::ErrorKind::NotFound,
+                "Uma ou ambas as arestas não foram encontradas",
+            ))
+        }
+    }
+
     fn remove_all_edges(&mut self, node: i32) {
         for (_node, edges) in self.adj_list.iter_mut() {
             edges.remove(&(node as usize));
