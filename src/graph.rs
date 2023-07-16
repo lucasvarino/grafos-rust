@@ -3,56 +3,15 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io;
 use std::io::BufRead;
-use std::borrow::Borrow;
-use std::hash::{Hash, Hasher};
 use std::path::Path;
 
-#[derive(Debug, Eq, Copy, Clone)]
-pub struct Edge {
-    dest: usize,
-    weight: i32,
-}
-impl PartialEq for Edge {
-    fn eq(&self, other: &Edge) -> bool {
-        self.dest == other.dest
-    }
-}
-
-impl Hash for Edge {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.dest.hash(state);
-    }
-}
-
-impl Borrow<usize> for Edge {
-    fn borrow(&self) -> &usize {
-        &self.dest
-    }
-}
-
-impl Edge {
-
-    pub fn new(dest: usize, weight: i32) -> Self {
-        Edge { dest, weight }
-    }
-    
-    pub fn get_dest(&self) -> usize {
-        self.dest
-    }
-
-    pub fn get_weight(&self) -> i32 {
-        self.weight
-    }
-
-}
-
+use crate::edge::Edge;
 
 #[derive(Debug)]
 pub struct Graph {
     adj_list: HashMap<usize, HashSet<Edge>>,
     pub order: i32,
 }
-
 
 impl Graph {
     pub fn new() -> Self {
@@ -75,13 +34,19 @@ impl Graph {
         self.adj_list
             .entry(dest)
             .or_insert_with(HashSet::new)
-            .insert(Edge { dest:src, weight });
+            .insert(Edge { dest: src, weight });
     }
 
-    pub fn get_edge_weight(&mut self, src:i32, dest:i32) -> io::Result<i32>{
+    pub fn get_edge_weight(&mut self, src: i32, dest: i32) -> io::Result<i32> {
         let src_usize = src as usize;
         let dest_usize = dest as usize;
-        let weight: i32 = self.adj_list.entry(src_usize).or_default().get(&dest_usize).unwrap().get_weight();
+        let weight: i32 = self
+            .adj_list
+            .entry(src_usize)
+            .or_default()
+            .get(&dest_usize)
+            .unwrap()
+            .get_weight();
         Ok(weight)
     }
 
