@@ -50,12 +50,15 @@ impl Edge {
 #[derive(Debug)]
 pub struct Graph {
     adj_list: HashMap<usize, HashSet<Edge>>,
+    pub order: i32,
+    adj_list: HashMap<usize, HashSet<usize>>,
 }
 
 
 impl Graph {
     pub fn new() -> Self {
         Graph {
+            order: 0,
             adj_list: HashMap::new(),
         }
     }
@@ -123,6 +126,19 @@ impl Graph {
         }
     }
 
+    pub fn get_open_neighborhood(&mut self, node: i32) -> &HashSet<usize> {
+        self.adj_list.entry(node as usize).or_default()
+    }
+
+    pub fn get_closed_neighborhood(&mut self, node: i32) -> HashSet<usize> {
+        self.adj_list
+            .iter()
+            .filter(|(_index, edge)| edge.contains(&(node as usize)))
+            .flat_map(|(_index, edge)| edge)
+            .cloned()
+            .collect()
+    }
+
     pub fn print_graph(&self) {
         for (node, edges) in &self.adj_list {
             println!("Adjacency list of node {}:", node);
@@ -155,6 +171,8 @@ where
             let dst: usize = parts[2].parse().unwrap();
             let weight: i32 = parts[3].parse().unwrap();
             graph.add_edge(src, dst, weight);
+        } else {
+            graph.order = parts[0].parse().unwrap();
         }
     }
 
