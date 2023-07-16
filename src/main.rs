@@ -2,7 +2,7 @@ mod edge;
 mod graph;
 
 fn main() {
-    let mut graph_result = graph::read_graph_from_file("test.txt").unwrap_or_else(|e| {
+    let mut graph_result = graph::read_graph_from_file("complete_graph.txt").unwrap_or_else(|e| {
         eprintln!("Erro ao ler o arquivo de grafo: {}", e);
         std::process::exit(1);
     });
@@ -12,6 +12,8 @@ fn main() {
     println!("Numero de arestas: {}", num_edges);
 
     graph_result.print_graph();
+
+    println!("É completo? {}", graph_result.is_complete());
 
     graph_result.remove_edge(1, 2).unwrap();    
 
