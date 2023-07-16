@@ -90,10 +90,12 @@ impl Graph {
         }
         num_edges/2
     }
-    // TODO: Verificar o grau de cada nó
+
     pub fn is_complete(&mut self) -> bool{
         let num_edges = self.get_num_edges();
-        num_edges == (self.order*(self.order-1)/2) as usize
+        let edge_condition: bool = num_edges == (self.order*(self.order-1)/2) as usize;
+        let degree_condition: bool = self.adj_list.iter().all(|(_node, edges)| edges.len() == (self.order-1) as usize);
+        edge_condition && degree_condition
     }
 
     pub fn remove_node(&mut self, node: i32) {
