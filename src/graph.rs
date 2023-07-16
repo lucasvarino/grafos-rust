@@ -4,25 +4,25 @@ use std::fs::File;
 use std::io;
 use std::io::BufRead;
 use std::borrow::Borrow;
-use std::hash::Hash;
+use std::hash::{Hash, Hasher};
 use std::path::Path;
 
-#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+#[derive(Debug, Eq, Copy, Clone)]
 pub struct Edge {
     dest: usize,
     weight: i32,
 }
-// impl PartialEq for Edge {
-//     fn eq(&self, other: &Edge) -> bool {
-//         self.dest == other.dest
-//     }
-// }
+impl PartialEq for Edge {
+    fn eq(&self, other: &Edge) -> bool {
+        self.dest == other.dest
+    }
+}
 
-// impl Hash for Edge {
-//     fn hash<H: Hasher>(&self, state: &mut H) {
-//         self.dest.hash(state);
-//     }
-// }
+impl Hash for Edge {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.dest.hash(state);
+    }
+}
 
 impl Borrow<usize> for Edge {
     fn borrow(&self) -> &usize {
@@ -153,8 +153,7 @@ where
         if index > 0 && parts[0] == "e" {
             let src: usize = parts[1].parse().unwrap();
             let dst: usize = parts[2].parse().unwrap();
-            // let weight: i32 = parts[3].parse().unwrap();
-            let weight: i32 = 1;
+            let weight: i32 = parts[3].parse().unwrap();
             graph.add_edge(src, dst, weight);
         }
     }
