@@ -83,6 +83,19 @@ impl Graph {
         }
     }
 
+    pub fn get_num_edges(&mut self) -> usize{
+        let mut num_edges = 0;
+        for (_node, edges) in self.adj_list.iter_mut() {
+            num_edges += edges.len();
+        }
+        num_edges/2
+    }
+
+    pub fn is_complete(&mut self) -> bool{
+        let num_edges = self.get_num_edges();
+        num_edges == (self.order*(self.order-1)/2) as usize
+    }
+
     pub fn remove_node(&mut self, node: i32) {
         match self.adj_list.remove(&(node as usize)) {
             Some(_) => self.remove_all_edges(node),
