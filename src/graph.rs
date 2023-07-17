@@ -99,8 +99,13 @@ impl Graph {
     }
 
     pub fn remove_node(&mut self, node: i32) {
-        match self.adj_list.remove(&(node as usize)) {
-            Some(_) => self.remove_all_edges(node),
+        let node_usize = node as usize;
+
+        match self.adj_list.remove(&node_usize) {
+            Some(_) => {
+                self.remove_all_edges(node);
+                self.node_list.remove(&node_usize);
+            }
             None => (),
         }
     }
