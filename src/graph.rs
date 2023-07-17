@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::fs::File;
-use std::hash::Hash;
 use std::io;
 use std::io::BufRead;
 use std::path::Path;
@@ -96,7 +95,7 @@ impl Graph {
 
         self.node_list
             .entry(id as usize)
-            .or_insert(Node::new(id as i32, weight));
+            .or_insert(Node::new(id, weight));
     }
 
     pub fn remove_node(&mut self, node: i32) {
