@@ -26,4 +26,8 @@ impl Node {
     pub fn get_degree(&self) -> u32 {
         self.degree
     }
+
+    pub fn decrement_degree(&mut self) {
+        self.degree -= 1;
+    }
 }

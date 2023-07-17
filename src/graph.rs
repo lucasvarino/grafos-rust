@@ -72,8 +72,13 @@ impl Graph {
             .entry(dest_usize)
             .or_default()
             .remove(&src_usize);
+        
 
         if remove_src && remove_dest {
+
+            self.node_list.get_mut(&(dest as usize)).unwrap().decrement_degree();
+            self.node_list.get_mut(&(src as usize)).unwrap().decrement_degree();
+
             Ok(())
         } else {
             Err(io::Error::new(
@@ -103,17 +108,21 @@ impl Graph {
 
     pub fn get_num_edges(&mut self) -> usize{
         let mut num_edges = 0;
+
         for (_node, edges) in self.adj_list.iter_mut() {
             num_edges += edges.len();
         }
+
         num_edges/2
     }
 
     pub fn is_complete(&mut self) -> bool{
         let num_edges = self.get_num_edges();
         let edge_condition: bool = num_edges == (self.order*(self.order-1)/2) as usize;
+
         // let degree_condition: bool = self.adj_list.iter().all(|(_node, edges)| edges.len() == (self.order-1) as usize);
         let degree_condition: bool = self.node_list.iter().all(|(_node, node)| node.get_degree() == (self.order-1) as u32);
+        
         edge_condition && degree_condition
     }
 
