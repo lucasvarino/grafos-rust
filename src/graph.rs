@@ -87,6 +87,18 @@ impl Graph {
         }
     }
 
+    pub fn add_node(&mut self, id: usize) {
+        let weight: f32 = ((id % 200) + 1) as f32;
+
+        if self.node_list.len() as i32 == self.order {
+            return;
+        }
+
+        self.node_list
+            .entry(id as usize)
+            .or_insert(Node::new(id as i32, weight));
+    }
+
     pub fn remove_node(&mut self, node: i32) {
         match self.adj_list.remove(&(node as usize)) {
             Some(_) => self.remove_all_edges(node),
@@ -139,6 +151,8 @@ where
             let dst: usize = parts[2].parse().unwrap();
             let weight: i32 = parts[3].parse().unwrap();
             graph.add_edge(src, dst, weight);
+            graph.add_node(src);
+            graph.add_node(dst);
         } else {
             graph.order = parts[0].parse().unwrap();
         }
