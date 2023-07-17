@@ -1,15 +1,18 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::fs::File;
+use std::hash::Hash;
 use std::io;
 use std::io::BufRead;
 use std::path::Path;
 
 use crate::edge::Edge;
+use crate::node::Node;
 
 #[derive(Debug)]
 pub struct Graph {
     adj_list: HashMap<usize, HashSet<Edge>>,
+    node_list: HashMap<usize, Node>,
     pub order: i32,
 }
 
@@ -17,6 +20,7 @@ impl Graph {
     pub fn new() -> Self {
         Graph {
             order: 0,
+            node_list: HashMap::new(),
             adj_list: HashMap::new(),
         }
     }
