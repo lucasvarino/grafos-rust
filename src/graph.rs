@@ -6,10 +6,12 @@ use std::io::BufRead;
 use std::path::Path;
 
 use crate::edge::Edge;
+use crate::node::Node;
 
 #[derive(Debug)]
 pub struct Graph {
     adj_list: HashMap<usize, HashSet<Edge>>,
+    node_list: HashMap<usize, Node>,
     pub order: i32,
 }
 
@@ -17,6 +19,7 @@ impl Graph {
     pub fn new() -> Self {
         Graph {
             order: 0,
+            node_list: HashMap::new(),
             adj_list: HashMap::new(),
         }
     }
@@ -83,6 +86,18 @@ impl Graph {
         }
     }
 
+    pub fn add_node(&mut self, id: usize) {
+        let weight: f32 = ((id % 200) + 1) as f32;
+
+        if self.node_list.len() as i32 == self.order {
+            return;
+        }
+
+        self.node_list
+            .entry(id as usize)
+            .or_insert(Node::new(id, weight));
+    }
+
     pub fn get_num_edges(&mut self) -> usize{
         let mut num_edges = 0;
         for (_node, edges) in self.adj_list.iter_mut() {
@@ -99,8 +114,13 @@ impl Graph {
     }
 
     pub fn remove_node(&mut self, node: i32) {
-        match self.adj_list.remove(&(node as usize)) {
-            Some(_) => self.remove_all_edges(node),
+        let node_usize = node as usize;
+
+        match self.adj_list.remove(&node_usize) {
+            Some(_) => {
+                self.remove_all_edges(node);
+                self.node_list.remove(&node_usize);
+            }
             None => (),
         }
     }
@@ -150,6 +170,8 @@ where
             let dst: usize = parts[2].parse().unwrap();
             let weight: i32 = parts[3].parse().unwrap();
             graph.add_edge(src, dst, weight);
+            graph.add_node(src);
+            graph.add_node(dst);
         } else {
             graph.order = parts[0].parse().unwrap();
         }
