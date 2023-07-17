@@ -1,5 +1,6 @@
 mod edge;
 mod graph;
+mod node;
 
 fn main() {
     let mut graph_result = graph::read_graph_from_file("test.txt").unwrap_or_else(|e| {
