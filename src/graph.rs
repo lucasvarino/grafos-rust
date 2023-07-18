@@ -120,14 +120,11 @@ impl Graph {
             .or_insert(Node::new(id, weight));
     }
 
-    pub fn get_num_edges(&mut self) -> usize{
-        let mut num_edges = 0;
-
-        for (_node, edges) in self.adj_list.iter_mut() {
-            num_edges += edges.len();
-        }
-
-        num_edges/2
+    pub fn get_num_edges(&self) -> usize{
+        self.adj_list
+        .values()
+        .map(|edges| edges.len())
+        .sum::<usize>() / 2
     }
 
     pub fn is_complete(&mut self) -> bool{
