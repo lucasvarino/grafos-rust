@@ -39,8 +39,15 @@ impl Graph {
             .or_insert_with(HashSet::new)
             .insert(Edge::new(src, weight));
         
-        self.node_list.get_mut(&dest).unwrap().increment_degree();
-        self.node_list.get_mut(&src).unwrap().increment_degree();
+        self.node_list
+        .get_mut(&dest)
+        .unwrap()
+        .increment_degree();
+
+        self.node_list
+        .get_mut(&src)
+        .unwrap()
+        .increment_degree();
     }
 
     pub fn get_edge_weight(&mut self, src: i32, dest: i32) -> io::Result<i32> {
@@ -76,8 +83,15 @@ impl Graph {
 
         if remove_src && remove_dest {
 
-            self.node_list.get_mut(&(dest as usize)).unwrap().decrement_degree();
-            self.node_list.get_mut(&(src as usize)).unwrap().decrement_degree();
+            self.node_list
+            .get_mut(&(dest as usize))
+            .unwrap()
+            .decrement_degree();
+
+            self.node_list
+            .get_mut(&(src as usize))
+            .unwrap()
+            .decrement_degree();
 
             Ok(())
         } else {
