@@ -127,7 +127,7 @@ impl Graph {
         .sum::<usize>() / 2
     }
 
-    pub fn is_complete(&mut self) -> bool{
+    pub fn is_complete(&self) -> bool{
         let num_edges = self.get_num_edges();
         let edge_condition: bool = num_edges == (self.order*(self.order-1)/2) as usize;
 
@@ -137,7 +137,7 @@ impl Graph {
         edge_condition && degree_condition
     }
 
-    pub fn get_complement(&mut self) -> io::Result<Graph>{
+    pub fn get_complement(&self) -> io::Result<Graph>{
         if self.is_complete() {
            return Err(io::Error::new(
                 io::ErrorKind::NotFound,
