@@ -1,7 +1,5 @@
 # Teoria dos Grafos
-
-## Implementação de uma estrutura de Grafos em formato de Lista de Adjacências em **Rust**.
-
+Implementação de uma estrutura de Grafos em formato de Lista de Adjacências em **Rust**.
 # Funcionalidades prontas
 
 - [x] Criação e Remoção de Nós/Arestas;

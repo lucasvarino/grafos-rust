@@ -38,6 +38,16 @@ impl Graph {
             .entry(dest)
             .or_insert_with(HashSet::new)
             .insert(Edge::new(src, weight));
+        
+        self.node_list
+        .get_mut(&dest)
+        .unwrap()
+        .increment_degree();
+
+        self.node_list
+        .get_mut(&src)
+        .unwrap()
+        .increment_degree();
     }
 
     pub fn get_edge_weight(&mut self, src: i32, dest: i32) -> io::Result<i32> {
@@ -69,8 +79,20 @@ impl Graph {
             .entry(dest_usize)
             .or_default()
             .remove(&src_usize);
+        
 
         if remove_src && remove_dest {
+
+            self.node_list
+            .get_mut(&(dest as usize))
+            .unwrap()
+            .decrement_degree();
+
+            self.node_list
+            .get_mut(&(src as usize))
+            .unwrap()
+            .decrement_degree();
+
             Ok(())
         } else {
             Err(io::Error::new(
@@ -96,6 +118,23 @@ impl Graph {
         self.node_list
             .entry(id as usize)
             .or_insert(Node::new(id, weight));
+    }
+
+    pub fn get_num_edges(&self) -> usize{
+        self.adj_list
+        .values()
+        .map(|edges| edges.len())
+        .sum::<usize>() / 2
+    }
+
+    pub fn is_complete(&mut self) -> bool{
+        let num_edges = self.get_num_edges();
+        let edge_condition: bool = num_edges == (self.order*(self.order-1)/2) as usize;
+
+        // let degree_condition: bool = self.adj_list.iter().all(|(_node, edges)| edges.len() == (self.order-1) as usize);
+        let degree_condition: bool = self.node_list.iter().all(|(_node, node)| node.get_degree() == (self.order-1) as u32);
+        
+        edge_condition && degree_condition
     }
 
     pub fn remove_node(&mut self, node: i32) {
@@ -154,9 +193,12 @@ where
             let src: usize = parts[1].parse().unwrap();
             let dst: usize = parts[2].parse().unwrap();
             let weight: i32 = parts[3].parse().unwrap();
-            graph.add_edge(src, dst, weight);
+
             graph.add_node(src);
             graph.add_node(dst);
+
+            graph.add_edge(src, dst, weight);
+            
         } else {
             graph.order = parts[0].parse().unwrap();
         }
