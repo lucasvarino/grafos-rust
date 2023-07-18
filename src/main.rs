@@ -23,6 +23,8 @@ fn main() {
 
     num_edges = graph_result.get_num_edges();
 
+    let complement = graph_result.get_complement().unwrap();
+
     println!("Numero de arestas: {}", num_edges);
 
     let weight: i32 = graph_result.get_edge_weight(1, 3).unwrap();
@@ -35,4 +37,7 @@ fn main() {
     println!("Vizinhos abertos do no 1: {:?}", neighbors.iter().map(|e| e.get_dest()).collect::<Vec<usize>>());
 
     println!("É completo? {}", graph_result.is_complete());
+
+    println!("Grafo complementar: ");
+    complement.print_graph();
 }

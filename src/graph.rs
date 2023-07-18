@@ -137,6 +137,35 @@ impl Graph {
         edge_condition && degree_condition
     }
 
+    pub fn get_complement(&mut self) -> io::Result<Graph>{
+        if self.is_complete() {
+           return Err(io::Error::new(
+                io::ErrorKind::NotFound,
+                "O grafo já é completo",
+            ));
+        }
+        let mut complement = Graph::new();
+        complement.order = self.order;
+
+        complement.node_list = self.node_list.clone();
+
+        match self.adj_list
+        .iter()
+        .next() 
+        {
+            Some((node, edges)) => {
+                for i in 1..(self.order+1) {
+                    if i != *node as i32 && !edges.contains(&(i as usize)) {
+                        complement.add_edge(*node, i as usize, 1);
+                    }
+                }
+            }
+            None => (),
+        }
+
+        Ok(complement)
+    }
+
     pub fn remove_node(&mut self, node: i32) {
         let node_usize = node as usize;
 
