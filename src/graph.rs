@@ -127,7 +127,7 @@ impl Graph {
         .sum::<usize>() / 2
     }
 
-    pub fn is_complete(&mut self) -> bool{
+    pub fn is_complete(&self) -> bool{
         let num_edges = self.get_num_edges();
         let edge_condition: bool = num_edges == (self.order*(self.order-1)/2) as usize;
 
@@ -135,6 +135,35 @@ impl Graph {
         let degree_condition: bool = self.node_list.iter().all(|(_node, node)| node.get_degree() == (self.order-1) as u32);
         
         edge_condition && degree_condition
+    }
+
+    pub fn get_complement(&self) -> io::Result<Graph>{
+        if self.is_complete() {
+           return Err(io::Error::new(
+                io::ErrorKind::NotFound,
+                "O grafo já é completo",
+            ));
+        }
+        let mut complement = Graph::new();
+        complement.order = self.order;
+
+        complement.node_list = self.node_list.clone();
+
+        match self.adj_list
+        .iter()
+        .next() 
+        {
+            Some((node, edges)) => {
+                for i in 1..(self.order+1) {
+                    if i != *node as i32 && !edges.contains(&(i as usize)) {
+                        complement.add_edge(*node, i as usize, 1);
+                    }
+                }
+            }
+            None => (),
+        }
+
+        Ok(complement)
     }
 
     pub fn remove_node(&mut self, node: i32) {
