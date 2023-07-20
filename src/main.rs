@@ -8,6 +8,11 @@ fn main() {
         std::process::exit(1);
     });
 
+    let test = graph::read_graph_from_file("test.txt").unwrap_or_else(|e| {
+        eprintln!("Erro ao ler o arquivo de grafo: {}", e);
+        std::process::exit(1);
+    });
+
     let mut num_edges: usize = graph_result.get_num_edges();
 
     println!("Numero de arestas: {}", num_edges);
@@ -38,6 +43,14 @@ fn main() {
 
     println!("É completo? {}", graph_result.is_complete());
 
+    let union = graph_result.get_union(test);
+
+    union.print_graph();
+
     println!("Grafo complementar: ");
+
+    
+    
+
     complement.print_graph();
 }

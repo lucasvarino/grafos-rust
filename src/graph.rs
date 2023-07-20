@@ -137,6 +137,39 @@ impl Graph {
         edge_condition && degree_condition
     }
 
+    pub fn get_union(&self, other : Graph)->Graph{
+        let mut union = Graph::new();
+
+        if self.order > other.order {
+            union.order = self.order;
+        }else{
+            union.order = other.order;
+        }
+
+        for i in 1..(union.order+1) {
+            union.add_node(i as usize);
+        }
+        
+
+        self.adj_list
+        .iter()
+        .map(|(node, edges)| {
+            for edge in edges {
+                union.add_edge(*node, edge.get_dest(), edge.get_weight());
+            }
+        });
+
+        other.adj_list
+        .iter()
+        .map(|(node, edges)| {
+            for edge in edges {
+                union.add_edge(*node, edge.get_dest(), edge.get_weight());
+            }
+        });
+
+        union
+    }
+
     pub fn get_complement(&self) -> io::Result<Graph>{
         if self.is_complete() {
            return Err(io::Error::new(
